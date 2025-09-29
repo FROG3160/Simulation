@@ -6,7 +6,7 @@
         {
             "type": "shell",
             "label": "Create Virtual Environment",
-            "command": "${env:USERPROFILE}\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+            "command": "${env:USERPROFILE}\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
             "args": [
                 "-m",
                 "venv",
