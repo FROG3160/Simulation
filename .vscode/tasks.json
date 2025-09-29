@@ -13,7 +13,7 @@
                 "${workspaceFolder}\\.venv"
             ],
             "options": {
-                "cwd": "${env:USERPROFILE}\\AppData\\Local\\Programs\\Python\\Python312\\",
+                "cwd": "${env:USERPROFILE}\\AppData\\Local\\Programs\\Python\\Python313\\",
                 "shell": {
                     "executable": "cmd.exe",
                     "args": [
