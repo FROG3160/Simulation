@@ -57,9 +57,9 @@
         {
             "label": "RobotPy Sync",
             "type": "shell",
-            "command": "robotpy sync",
+            "command": "pwd && source ../.venv/Scripts/activate && python -m robotpy sync",
             "options": {
-                "cwd": "roborio",
+                "cwd": "${workspaceFolder}/roborio",
                 "statusbar": {
                     "color": "#0F0",
                     "label": "$(refresh) Sync/Update"
