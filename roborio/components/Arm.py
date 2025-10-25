@@ -1,3 +1,4 @@
+#FIXME #2 rename file using lowercase characters only.
 from phoenix6.hardware import TalonFX
 from FROGlib.ctre import FROGTalonFX, FROGTalonFXConfig, FROGFeedbackConfig
 from phoenix6.configs import (
@@ -12,7 +13,8 @@ class MyComponent:
     def __init__(self):
     # initialize the component.
         self.name = "motor"
-        self.motor = FROGTalonFX(
+        self.motor = FROGTalonFX( # FIXME #1 Parenthesis not "closed", check comma separated list of arguments.
+            
             id: int=1,
             motor_config: FROGTalonFXConfig = FROGTalonFXConfig(
             feedback_config=FROGFeedbackConfig(),
