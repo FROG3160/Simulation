@@ -1,5 +1,5 @@
 # FIXME #2 rename file using lowercase characters only.
-from phoenix6.hardware import TalonFX
+from phoenix6.hardware import talonfX
 from FROGlib.ctre import FROGTalonFX, FROGTalonFXConfig, FROGFeedbackConfig
 from phoenix6.configs import (
     Slot0Configs,
