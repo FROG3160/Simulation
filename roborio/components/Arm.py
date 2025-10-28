@@ -1,5 +1,4 @@
 # FIXME #2 rename file using lowercase characters only.
-from phoenix6.hardware import TalonFX
 from FROGlib.ctre import FROGTalonFX, FROGTalonFXConfig, FROGFeedbackConfig
 from phoenix6.configs import (
     Slot0Configs,
@@ -23,9 +22,8 @@ class MyComponent:
                 .with_k_p(1)
                 .with_k_s(1)
                 .with_k_v(1)
-                .with_k_i(
-                    1
-                ),  # Need to edit the values once i found out what they should be.
+                .with_k_i(1),
+                # Need to edit the values once i found out what they should be.
             ),
             parent_nt="Arm",
             motor_name="motor",
