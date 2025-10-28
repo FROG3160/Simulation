@@ -22,9 +22,8 @@ class MyComponent:
                 .with_k_p(1)
                 .with_k_s(1)
                 .with_k_v(1)
-                .with_k_i(
-                    1
-                ),  # Need to edit the values once i found out what they should be.
+                .with_k_i(1),
+                # Need to edit the values once i found out what they should be.
             ),
             parent_nt="Arm",
             motor_name="motor",
