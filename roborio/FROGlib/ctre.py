@@ -7,41 +7,126 @@ from phoenix6.hardware.pigeon2 import Pigeon2
 from phoenix6.hardware.talon_fx import TalonFX
 from phoenix6.configs.talon_fx_configs import FeedbackSensorSourceValue
 from phoenix6.configs.config_groups import Slot0Configs, Slot1Configs, FeedbackConfigs
-from phoenix6.signals.spn_enums import GravityTypeValue, SensorDirectionValue
+from phoenix6.signals.spn_enums import (
+    GravityTypeValue,
+    SensorDirectionValue,
+    StaticFeedforwardSignValue,
+)
+
+
+class FROGSlotConfig(Slot0Configs, Slot1Configs):
+    """FROG custom Slot0Configs that takes parameters during instantiation."""
+
+    def __init__(self, **kwargs):
+        """Gains for the specified slot.
+
+        These gains are used in closed-loop control requests when this slot
+        is selected.
+
+        Args:
+            **kwargs: Keyword arguments to override default gain values. Supported keys:
+                k_p (float): Proportional gain. Defaults to 0.0.
+                k_i (float): Integral gain.
+                k_d (float): Derivative gain.
+                k_s (float): Static feedforward gain.
+                k_v (float): Velocity feedforward gain.
+                k_a (float): Acceleration feedforward gain.
+                k_g (float): Gravity feedforward gain.
+                gravity_type (GravityTypeValue): Gravity compensation type.
+                static_feedforward_sign (StaticFeedforwardSignValue): Sign for static feedforward.
+        """
+        # sets the default values for all attributes in Slot0Configs/Slot1Configs
+        super().__init__()
+        # only set attrubutes that already exist in the class
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
 
 
 class FROGFeedbackConfig(FeedbackConfigs):
-    def __init__(
-        self, remote_sensor_id=0, sensor_source=FeedbackSensorSourceValue.ROTOR_SENSOR
-    ):
-        super().__init__()
-        self.feedback_remote_sensor_id = remote_sensor_id
-        self.feedback_sensor_source = sensor_source
-        # TODO: Add this in if it makes sense
-        # self.rotor_to_sensor_ratio =
-        # self.sensor_to_mechanism_ratio =
-
-
-class FROGTalonFXConfig(TalonFXConfiguration):
-    """A subclass of TalonFXConfiguration that adds the ability to pass parameters to __init__
-    during instantiation instead of creating an instance and then setting attributes."""
+    """FROG custom FeedbackConfig that takes parameters during instantiation."""
 
     def __init__(
         self,
-        feedback_config=FROGFeedbackConfig(),
-        slot0gains=Slot0Configs(),
-        slot1gains=Slot1Configs(),
+        **kwargs,
     ):
+        """
+        Initialize feedback-related configuration for this motor controller.
+        This constructor sets up configurations that affect the feedback behavior of
+        the motor controller, such as the feedback sensor source, sensor/rotor offsets,
+        and unit conversion ratios used for closed-loop control.
+        Args:
+            **kwargs: Arbitrary keyword arguments mapping configuration names to their
+                values. Recognized keys (if present) include:
+                - feedback_rotor_offset (float): Offset to apply to rotor feedback.
+                - sensor_to_mechanism_ratio (float): Ratio to convert sensor units to
+                    mechanism units.
+                - rotor_to_sensor_ratio (float): Ratio to convert rotor units to sensor
+                    units.
+                - feedback_sensor_source (str|int): Identifier or type of the feedback
+                    sensor source.
+                - feedback_remote_sensor_id (int): ID of a remote feedback sensor, if
+                    used.
+                - velocity_filter_time_constant (float): Time constant used when
+                    filtering velocity measurements.
+        Notes:
+            For each key provided in kwargs, if the instance has an attribute with the
+            same name, the attribute will be set to the provided value. Unrecognized
+            keys are ignored.
+        """
+
         super().__init__()
-        self.feedback = feedback_config
-        self.slot0 = slot0gains
-        self.slot1 = slot1gains
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+
+class FROGTalonFXConfig(TalonFXConfiguration):
+    """FROG custom TalonFXConfiguration that takes parameters during instantiation."""
+
+    def __init__(
+        self,
+        **kwargs,
+    ):
+        """
+        Initialize the CTRE configuration wrapper.
+                Args:
+                    **kwargs: Optional configuration overrides. Supported keyword keys are:
+                        future_proof_configs (bool): Whether to enable future-proof configs. Defaults to True.
+                        motor_output (MotorOutputConfigs): Motor output configuration. Defaults to MotorOutputConfigs().
+                        current_limits (CurrentLimitsConfigs): Current limiting configuration. Defaults to CurrentLimitsConfigs().
+                        voltage (VoltageConfigs): Voltage-related configuration. Defaults to VoltageConfigs().
+                        torque_current (TorqueCurrentConfigs): Torque/current configuration. Defaults to TorqueCurrentConfigs().
+                        feedback (FeedbackConfigs): Additional feedback configuration. Defaults to FeedbackConfigs().
+                        differential_sensors (DifferentialSensorsConfigs): Differential sensor configuration.
+                            Defaults to DifferentialSensorsConfigs().
+                        differential_constants (DifferentialConstantsConfigs): Differential constants configuration.
+                            Defaults to DifferentialConstantsConfigs().
+                        open_loop_ramps (OpenLoopRampsConfigs): Open-loop ramp configuration. Defaults to OpenLoopRampsConfigs().
+                        closed_loop_ramps (ClosedLoopRampsConfigs): Closed-loop ramp configuration.
+                            Defaults to ClosedLoopRampsConfigs().
+                        hardware_limit_switch (HardwareLimitSwitchConfigs): Hardware limit switch configuration.
+                            Defaults to HardwareLimitSwitchConfigs().
+                        audio (AudioConfigs): Audio-related configuration. Defaults to AudioConfigs().
+                        software_limit_switch (SoftwareLimitSwitchConfigs): Software limit switch configuration.
+                            Defaults to SoftwareLimitSwitchConfigs().
+                        motion_magic (MotionMagicConfigs): Motion Magic configuration. Defaults to MotionMagicConfigs().
+                        custom_params (CustomParamsConfigs): Custom parameter mappings. Defaults to CustomParamsConfigs().
+                        closed_loop_general (ClosedLoopGeneralConfigs): General closed-loop settings.
+                            Defaults to ClosedLoopGeneralConfigs().
+                        slot0 (Slot0Configs): Alternative Slot 0 configuration object. Defaults to Slot0Configs().
+                        slot1 (Slot1Configs): Alternative Slot 1 configuration object. Defaults to Slot1Configs().
+                        slot2 (Slot2Configs): Slot 2 configuration object. Defaults to Slot2Configs().
+        """
+
+        super().__init__()
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
 
 
 class FROGTalonFX(TalonFX):
-    """A subclass of TalonFX that allows us to pass in the config and apply it during
-    instantiation.
-    """
+    """FROG custom TalonFX that takes parameters during instantiation."""
 
     def __init__(
         self,
