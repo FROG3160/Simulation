@@ -3,10 +3,12 @@ from phoenix6.hardware import TalonFX
 
 class myComponent:
     def __init__(self):
+        # TODO #5 Change TalonFX to use FROGlib FROGTalonFX
         self.motor = TalonFX(5)
 
     def set_height(self, height):
         self.motor.set_position(height)
 
 
+# TODO test me
 #

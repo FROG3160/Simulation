@@ -14,7 +14,7 @@ class MyComponent:
         # initialize the component.
         self.name = "motor"
         self.motor = FROGTalonFX(
-            id=1,
+            can_id=1,
             motor_config=FROGTalonFXConfig(
                 feedback_config=FROGFeedbackConfig(),
                 slot1gains=Slot1Configs()

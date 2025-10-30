@@ -130,7 +130,8 @@ class FROGTalonFX(TalonFX):
 
     def __init__(
         self,
-        id: int = 0,
+        can_id: int = 0,
+        can_bus: str = "rio",
         motor_config: FROGTalonFXConfig = FROGTalonFXConfig(),
         parent_nt: str = "Undefined",
         motor_name: str = "",
@@ -138,16 +139,17 @@ class FROGTalonFX(TalonFX):
         """Creates a TalonFX motor object with applied configuration
 
         Args:
-            id (int, required): The CAN ID assigned to the motor.
-            motor_config (FROGTalonFXConfig, required): The configuration to apply to the motor.
-            table_name: NetworksTable to put the motor data on
-            motor_name: NetworksTable name
+            can_id (int, required): The CAN ID of the motor.
+            can_bus (str, optional): The CAN bus the motor is connected to. Defaults to "rio".
+            motor_config (FROGTalonFXConfig): The configuration to apply to the motor. Defaults to a default FROGTalonFXConfig.
+            table_name (str, optional): NetworksTable to place motor data under. Defaults to "Undefined".
+            motor_name (str, optional): NetworksTable name for the motor. If left blank, will use "TalonFX(CAN ID)".
         """
-        super().__init__(device_id=id)
+        super().__init__(device_id=can_id, canbus=can_bus)
         self.config = motor_config
         self.configurator.apply(self.config)
         if motor_name == "":
-            motor_name = f"TalonFX({id})"
+            motor_name = f"TalonFX({can_id})"
         table = f"{parent_nt}/{motor_name}"
         self._motorVelocityPub = (
             NetworkTableInstance.getDefault()
